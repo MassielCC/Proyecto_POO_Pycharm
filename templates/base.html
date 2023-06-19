@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="static/logo.ico">
+    <link rel="icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,12 +28,19 @@
                 <li class="nav-item">
                   <a class="nav-link" aria-current="page" href="{{ url_for('carta') }}">Carta</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('post_form') }}">Contáctanos</a>
-                </li>
                 {% if admin%}
                     <li class="nav-item">
+                      <a class="nav-link" href="#">Editar carta</a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link" href="{{ url_for('comentarios') }}">Comentarios</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Favoritos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('post_form') }}">Contáctanos</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">

@@ -7,33 +7,32 @@ app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b
 
 HaIniciado_sesion = False
 esAdmin = False
+errorSesion= False
 @app.route("/")
 def index():
     return render_template("index.html", posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
 @app.route('/carta')
 def carta():
-    return render_template('/admin/carta.html')
+    return render_template('/admin/carta.html', posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
 @app.route('/comentarios')
 def comentarios():
-    return render_template('/admin/comentarios.html')
+    return render_template('/admin/comentarios.html', posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-usuarios=[]
+users=[]
 @app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
-    # creamos el objeto form de la clase SignupForm() que está en forms.py
     form = SignupForm()
     # verificamos cuando el usuario haga click en submit (botón Registrar)
     if form.validate_on_submit():
-        # si ha pasado la validación, creamos las siguientes variables
-        # y obtenemos sus datos:
+        # Obtenemos datos del form:
         name = form.name.data
         email = form.email.data
         password = form.password.data
         try:
-            with open("usuarios2.txt", "a+") as archivo1:
-                archivo1.write(f"{name}, {email}, {password}" + "\n")
+            with open("lista_usuarios.txt", "a+") as archivo1:
+                archivo1.write(f"{name},{email},{password}" + "\n")
         finally:
             archivo1.close()
         next = request.args.get('next', None)
@@ -49,7 +48,6 @@ publicaciones = []
 @app.route("/admin/post/", methods=['GET', 'POST'], defaults={'post_id': None})
 @app.route("/admin/post/<int:post_id>/", methods=['GET', 'POST'])
 def post_form(post_id):
-    # form es un objeto de la clase PostForm
     form = PostForm()
     # si yo hago click en Enviar, y la validación ha sido correcta:
     if form.validate_on_submit():
@@ -78,21 +76,29 @@ def login():
         print('email ingresado: ' +email)
         print('contraseña ingresada: ' +password)
         # recoro la lista usuarios
-        for elemento in usuarios:
+        for elemento in users:
             print(elemento)
             # evaluo el valor de 'usuario' y contraseña en el diccionario vs el ingresado en el formulario
             if elemento['usuario'] == email and elemento['clave'].strip() == password:
                 # si cumple imprimimos en pantalla: inicio de sesión correcto!
                 print('Inicio de sesión correcto!')
-                global HaIniciado_sesion # modifico el valor de la linea 10
-                HaIniciado_sesion = True # lo modifico por Verdadero
+                global HaIniciado_sesion
+                HaIniciado_sesion = True
+                global errorSesion
+                errorSesion = False
                 if email == "marelly.colla@upch.pe" or email == "sebastian.saldana@upch.pe":
                     print("Es administrador")
                     global esAdmin
                     esAdmin = True
+                break
             else:
                 print("Error")
-        return render_template("index.html", posts=publicaciones, inicioSesion= HaIniciado_sesion, admin=esAdmin)
+                errorSesion = True
+
+        if(errorSesion):
+            return render_template("/admin/login.html", form=form, error=errorSesion)
+
+        return render_template("index.html", posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
     return render_template("/admin/login.html", form=form)
 
 @app.route("/signout")
@@ -107,21 +113,20 @@ def cerrar_sesion():
 if __name__ == '__main__':
     try:
         # lectura del archivo usuarios.txt
-        with open("usuarios3.txt", "r") as archivo2:
+        with open("lista_usuarios.txt", "r") as archivo2:
             # en usuarios_ guardamos el contenido de usuarios.txt como una lista de str
             usuarios_ = archivo2.readlines()
-            print("Imprimir todo")
-            print(usuarios_)
+            print("contenido: ", usuarios_)
+    except FileNotFoundError:
+        print("No se ha creado el archivo")
     finally:
         archivo2.close()
         for u_ in usuarios_:
             # divido en una lista el contenido de cada linea
             info = u_.split(',')
-            print("Imprimir info")
-            print(info)
             elemento = {}  # creo el diccionario elemento
             elemento['usuario'] = info[1]  # el key 'usuario' toma el valor del correo
-            elemento['clave'] = info[2]  # el key 'clave' guarda la contraseña
-            usuarios.append(elemento)
+            elemento['clave'] = info[2].strip('\n')  # el key 'clave' guarda la contraseña
+            users.append(elemento)
 
     app.run(debug=True)
