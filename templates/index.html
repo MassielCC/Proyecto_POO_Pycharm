@@ -1,0 +1,54 @@
+{% extends './base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block body %}
+<div class="imagenCentral">
+    <img src="{{ url_for('static', filename='imagen/fondo2.png') }}" style="width:100%">
+</div>
+<div class="galeria col-12">
+    <div class="row">
+        <div class="col photo">
+            <img src="{{ url_for('static', filename='imagen/arroz_pollo.jpg') }}">
+        </div>
+        <div class="col photo">
+            <img src="{{ url_for('static', filename='imagen/causa-rellena-de-pollo.jpg') }}">
+        </div>
+        <div class="col photo">
+            <img src="{{ url_for('static', filename='imagen/champinones.jpg') }}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col photo">
+            <img src="{{ url_for('static', filename='imagen/lomo_saltado.jpg') }}">
+        </div>
+        <div class="col photo">
+            <img src="{{ url_for('static', filename='imagen/arroz-chaufa.jpg') }}">
+        </div>
+    </div>
+</div>
+<div class="container py-3">
+    <br>
+    <h2>Acerca de nosotros</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed justo eros, blandit eu sem a, posuere pulvinar metus. Curabitur egestas eget quam nec euismod. Cras eget ante ut dolor elementum pulvinar at ut felis. Aenean a varius felis. Quisque vitae vestibulum est. Aliquam elementum ut mi in tristique. Integer pulvinar viverra justo nec feugiat.</p>
+    <div class="row">
+        <div class="col-md-6 col-sm-12" style="padding: 10px;">
+            <h6>Horario de atención</h6>
+            <p class="detalles"><b>Lunes:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Martes:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Miercoles:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Jueves:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Viernes:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Sábado:</b> 09:00 am - 17:00 pm</p>
+            <p class="detalles"><b>Domingo:</b> 09:00 am - 17:00 pm</p>
+        </div>
+        <div class="col-md-6 col-sm-12" style="padding: 10px;">
+            <h6>Ubicación</h6>
+            <p>Av. Honorio Delgado 430, San Martín de Porres 15102</p>
+            <h6>Correo</h6>
+            <p>perucriolla@gmail.com</p>
+            <h6>Telefono</h6>
+            <p>991 228 337</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
