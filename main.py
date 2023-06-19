@@ -15,6 +15,10 @@ def index():
 def carta():
     return render_template('/admin/carta.html')
 
+@app.route('/comentarios')
+def comentarios():
+    return render_template('/admin/comentarios.html')
+
 usuarios=[]
 @app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
@@ -27,11 +31,9 @@ def show_signup_form():
         name = form.name.data
         email = form.email.data
         password = form.password.data
-        user = {'nombre': name, 'usuario':email, 'clave': password}
-        usuarios.append(user)
         try:
-            with open("usuarios1.txt", "a+") as archivo1:
-                archivo1.write(f"{user}")
+            with open("usuarios2.txt", "a+") as archivo1:
+                archivo1.write(f"{name}, {email}, {password}" + "\n")
         finally:
             archivo1.close()
         next = request.args.get('next', None)
@@ -105,14 +107,18 @@ def cerrar_sesion():
 if __name__ == '__main__':
     try:
         # lectura del archivo usuarios.txt
-        with open("usuarios.txt", "r") as archivo2:
+        with open("usuarios3.txt", "r") as archivo2:
             # en usuarios_ guardamos el contenido de usuarios.txt como una lista de str
             usuarios_ = archivo2.readlines()
+            print("Imprimir todo")
+            print(usuarios_)
     finally:
         archivo2.close()
         for u_ in usuarios_:
             # divido en una lista el contenido de cada linea
             info = u_.split(',')
+            print("Imprimir info")
+            print(info)
             elemento = {}  # creo el diccionario elemento
             elemento['usuario'] = info[1]  # el key 'usuario' toma el valor del correo
             elemento['clave'] = info[2]  # el key 'clave' guarda la contraseña
