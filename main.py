@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
-
 from forms import SignupForm, PostForm, LoginForm
 
 app = Flask(__name__)
-# la llave o SECRET_KEY me ayuda a poder guardar las contraseñas de forma segura
 app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
 # app.config['SECRET_KEY'] = 'pass'
 
@@ -29,9 +27,11 @@ def show_signup_form():
         name = form.name.data
         email = form.email.data
         password = form.password.data
+        user = {'nombre': name, 'usuario':email, 'clave': password}
+        usuarios.append(user)
         try:
-            with open("usuarios.txt", "a+") as archivo1:
-                archivo1.write(f"{name}, {email}, {password}")
+            with open("usuarios1.txt", "a+") as archivo1:
+                archivo1.write(f"{user}")
         finally:
             archivo1.close()
         next = request.args.get('next', None)
@@ -51,11 +51,8 @@ def post_form(post_id):
     form = PostForm()
     # si yo hago click en Enviar, y la validación ha sido correcta:
     if form.validate_on_submit():
-        # obtengo el title
         title = form.title.data
-        # obtengo el title slug
         title_slug = form.title_slug.data
-        # obtengo el contenido del texto
         content = form.content.data
         # post es un diccionario con title, title_slug y content
         post = {'title': title, 'title_sub2': title_slug, 'content': content}
@@ -80,12 +77,19 @@ def login():
         print('contraseña ingresada: ' +password)
         # recoro la lista usuarios
         for elemento in usuarios:
+            print(elemento)
             # evaluo el valor de 'usuario' y contraseña en el diccionario vs el ingresado en el formulario
             if elemento['usuario'] == email and elemento['clave'].strip() == password:
                 # si cumple imprimimos en pantalla: inicio de sesión correcto!
                 print('Inicio de sesión correcto!')
                 global HaIniciado_sesion # modifico el valor de la linea 10
                 HaIniciado_sesion = True # lo modifico por Verdadero
+                if email == "marelly.colla@upch.pe" or email == "sebastian.saldana@upch.pe":
+                    print("Es administrador")
+                    global esAdmin
+                    esAdmin = True
+            else:
+                print("Error")
         return render_template("index.html", posts=publicaciones, inicioSesion= HaIniciado_sesion, admin=esAdmin)
     return render_template("/admin/login.html", form=form)
 
@@ -93,6 +97,8 @@ def login():
 def cerrar_sesion():
     global HaIniciado_sesion # indicamos que vamos a modificar el valor de la linea 10
     HaIniciado_sesion = False # modificamos el valor de HaIniciado_sesion a False
+    global esAdmin
+    esAdmin = False
     # retornamos la página web index.html con HaIniciado_sesion en False
     return render_template('index.html', posts=publicaciones, inicioSesion = HaIniciado_sesion, admin=esAdmin)
 

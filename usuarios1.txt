@@ -1,0 +1,1 @@
+{'nombre': 'Massiel', 'usuario': 'marelly.colla@upch.pe', 'clave': '123poo'}{'nombre': 'Sebastian', 'usuario': 'sebastian.saldana@upch.pe', 'clave': 'poo123'}
