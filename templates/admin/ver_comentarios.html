@@ -1,0 +1,20 @@
+{% extends './base.html' %}
+{% block title %}Comentarios{% endblock %}
+{% block body %}
+<div class="container py-3">
+    <br>
+    <h2 class="text-center">Comentarios</h2><br>
+    <div class="row">
+            {% for i in range(10) %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="Comentario {{ i }}" >
+                    <h6>Nombre</h6>
+                    <p> Correo</p><br>
+                    <p> Comentario </p>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

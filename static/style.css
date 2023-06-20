@@ -33,6 +33,10 @@ h2{
     font-weight:bold;
     overflow-y:hidden;
 }
+h4{
+    font-weight:bold;
+    overflow-y:hidden;
+}
 h6{
     color: #DD9E20;
     font-weight:bold;
@@ -43,9 +47,23 @@ h6{
     margin:0px;
 }
 .plato{
-    background-color: #EADED5;
+    background-color: #FFF1E7;
     padding: 10px 10px;
     margin-bottom:20px;
+}
+.styleButton{
+    background-color: #97311B;
+    color: white;
+    padding: 6px 26px;
+    border-radius: 8px;
+    border:none;
+}
+.styleButton:hover{
+    background-color: #fff;
+    color: #97311B;
+    border: 1px solid #97311B;
+    font-weight: bold;
+    transition-duration: 300ms;
 }
 @media (max-width: 500px) {
     nav .nav-item a{
