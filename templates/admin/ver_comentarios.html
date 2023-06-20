@@ -1,16 +1,14 @@
 {% extends './base.html' %}
 {% block title %}Comentarios{% endblock %}
 {% block body %}
-<div class="container py-3">
-    <br>
-    <h2 class="text-center">Comentarios</h2><br>
+<div class="container py-5">
+    <br><h2 class="text-center">Comentarios</h2><br>
     <div class="row">
-            {% for i in range(10) %}
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="Comentario {{ i }}" >
-                    <h6>Nombre</h6>
-                    <p> Correo</p><br>
-                    <p> Comentario </p>
+            {% for elem in post %}
+            <div class="col-8 mx-auto my-3 py-2" style="background-color:#ECECEC">
+                <div class="post-comment">
+                    <p class="border-bottom border-dark"><b>{{ elem.nombre }}</b> &nbsp| &nbsp {{ elem.correo }}</p>
+                    <p> {{ elem.texto }}</p>
                 </div>
             </div>
             {% endfor %}

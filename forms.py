@@ -29,4 +29,4 @@ class ComentarioForm(FlaskForm):
     nombre = StringField('Nombre', validators=[DataRequired()])
     correo = StringField('Correo', validators=[DataRequired(), Email()])
     comentario = StringField('Comentario', validators=[DataRequired()])
-    enviar = SubmitField('Crear Comentario')
+    submit = SubmitField('Crear Comentario')

@@ -54,29 +54,30 @@ def crear_carta(post_id):
         return redirect(url_for('index'))
     return render_template("/admin/crear_carta.html", form=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-@app.route('/admin/carta')
+@app.route("/admin/carta")
 def carta():
     return render_template('/admin/carta.html', posts=listaPlatos, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-comentarios=[]
-@app.route('/admin/comentario', methods=['GET', 'POST'])
+lista_comentarios=[]
+@app.route('/admin/comentarios', methods=['GET', 'POST'])
 def crear_comentario():
     formulario = ComentarioForm()
     if formulario.validate_on_submit():
         nombre = formulario.nombre.data
         correo = formulario.correo.data
-        comentario_texto = formulario.comentario.data
-        print(f'¡Comentario creado! Nombre: {nombre}, Correo: {correo}, Comentario: {comentario_texto}')
+        comentario = formulario.comentario.data
+        print(f'¡Comentario creado! Nombre: {nombre}, Correo: {correo}, Comentario: {comentario}')
         try:
             with open("comentarios.txt", "a+") as archivo1:
-                archivo1.write(f"{nombre},{correo},{comentario_texto}" + "\n")
+                archivo1.write(f"{nombre} & {correo} & {comentario}" + "\n")
         finally:
             archivo1.close()
-    return render_template('/admin/comentarios.html', formulario=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+        return redirect(url_for('index'))
+    return render_template('/admin/comentarios.html', form=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-@app.route('/admin/comentarios')
+@app.route("/admin/ver_comentarios/")
 def comentarios():
-    return render_template('/admin/ver_comentarios.html', comment= comentarios, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+    return render_template('/admin/ver_comentarios.html', post=lista_comentarios, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
 @app.route("/admin/login/", methods=["GET", "POST"])
 def login():
@@ -85,11 +86,11 @@ def login():
         # tomamos los valores ingresados por teclado en el formulario
         email = form.email.data
         password = form.password.data
-        print('email ingresado: ' +email)
-        print('contraseña ingresada: ' +password)
+        #print('email ingresado: ' +email)
+        #print('contraseña ingresada: ' +password)
         # recoro la lista usuarios
         for elemento in users:
-            print(elemento)
+            #print(elemento)
             # evaluo el valor de 'usuario' y contraseña en el diccionario vs el ingresado en el formulario
             if elemento['usuario'] == email and elemento['clave'].strip() == password:
                 # si cumple imprimimos en pantalla: inicio de sesión correcto!
@@ -128,7 +129,7 @@ if __name__ == '__main__':
         with open("lista_usuarios.txt", "r") as archivo2:
             # en usuarios_ guardamos el contenido de usuarios.txt como una lista de str
             usuarios_ = archivo2.readlines()
-            print("contenido: ", usuarios_)
+            #print("contenido: ", usuarios_)
     except FileNotFoundError:
         print("No se ha creado el archivo")
     finally:
@@ -155,5 +156,17 @@ if __name__ == '__main__':
             listaPlatos.append(plato)
 
     # Para mostrar comentarios al administrador
-
+    try:
+        with open("comentarios.txt", "r") as archivo1:
+            comment_all = archivo1.readlines()
+            #print(comment_all)
+    finally:
+        archivo1.close()
+        for line in comment_all:
+            elem = line.split('&')
+            comment = {}
+            comment['nombre'] = elem[0]
+            comment['correo'] = elem[1]
+            comment['texto'] = elem[2].strip('\n')
+            lista_comentarios.append(comment)
     app.run(debug=True)
