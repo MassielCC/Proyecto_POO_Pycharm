@@ -9,16 +9,24 @@ class SignupForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Registrar')
 
-class PostForm(FlaskForm):
-    # Estructura del formulario de Publicaciones
-    # submit es un botón cuyo título es Enviar
-
-    title = StringField('Título', validators=[DataRequired(), Length(max=128)])
-    title_slug = StringField('Título slug', validators=[Length(max=128)])
-    content = TextAreaField('Contenido')
-    submit = SubmitField('Enviar')
+#class PostForm(FlaskForm):
+    #title = StringField('Título', validators=[DataRequired(), Length(max=128)])
+    #title_slug = StringField('Título slug', validators=[Length(max=128)])
+    #content = TextAreaField('Contenido')
+    #submit = SubmitField('Enviar')
+class CartaForm(FlaskForm):
+    nombre = StringField('Nombre', validators=[DataRequired()])
+    descripcion = TextAreaField('Descripción', validators=[DataRequired()])
+    precio = StringField('Precio', validators=[DataRequired()])
+    submit = SubmitField('Agregar plato')
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Iniciar Sesión')
+
+class ComentarioForm(FlaskForm):
+    nombre = StringField('Nombre', validators=[DataRequired()])
+    correo = StringField('Correo', validators=[DataRequired(), Email()])
+    comentario = StringField('Comentario', validators=[DataRequired()])
+    enviar = SubmitField('Crear Comentario')

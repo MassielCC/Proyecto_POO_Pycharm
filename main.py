@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from forms import SignupForm, PostForm, LoginForm
+from forms import SignupForm, CartaForm, LoginForm, ComentarioForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
@@ -10,15 +10,7 @@ esAdmin = False
 errorSesion= False
 @app.route("/")
 def index():
-    return render_template("index.html", posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
-
-@app.route('/carta')
-def carta():
-    return render_template('/admin/carta.html', posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
-
-@app.route('/comentarios')
-def comentarios():
-    return render_template('/admin/comentarios.html', posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+    return render_template("index.html", inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
 users=[]
 @app.route("/signup/", methods=["GET", "POST"])
@@ -43,28 +35,48 @@ def show_signup_form():
     # caso contrario, redirige a signup_form con el contenido de form.
     return render_template("/admin/signup_form.html", form=form, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-# publicaciones es una lista vacía
-publicaciones = []
-@app.route("/admin/post/", methods=['GET', 'POST'], defaults={'post_id': None})
-@app.route("/admin/post/<int:post_id>/", methods=['GET', 'POST'])
-def post_form(post_id):
-    form = PostForm()
+listaPlatos = []
+@app.route("/admin/crear_carta/", methods=['GET', 'POST'], defaults={'post_id': None})
+@app.route("/admin/crear_carta/<int:post_id>/", methods=['GET', 'POST'])
+def crear_carta(post_id):
+    formulario = CartaForm()
     # si yo hago click en Enviar, y la validación ha sido correcta:
-    if form.validate_on_submit():
-        title = form.title.data
-        title_slug = form.title_slug.data
-        content = form.content.data
-        # post es un diccionario con title, title_slug y content
-        post = {'title': title, 'title_sub2': title_slug, 'content': content}
-        # agregar el post creado en la lista 'publicaciones'
-        publicaciones.append(post)
+    if formulario.validate_on_submit():
+        nombre = formulario.nombre.data
+        descripcion = formulario.descripcion.data
+        precio = formulario.precio.data
+        print(f'¡Plato agregado! Nombre: {nombre}, Descripción: {descripcion}')
         try:
-            with open("publicaciones.txt", "a+") as archivo1:
-                archivo1.write(f"{post}")
+            with open("platos_carta.txt", "a+") as archivo1:
+                archivo1.write(f"{nombre} & {descripcion} & {precio}" + "\n")
         finally:
             archivo1.close()
         return redirect(url_for('index'))
-    return render_template("/admin/post_form.html", form=form, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+    return render_template("/admin/crear_carta.html", form=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+
+@app.route('/admin/carta')
+def carta():
+    return render_template('/admin/carta.html', posts=listaPlatos, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+
+comentarios=[]
+@app.route('/admin/comentario', methods=['GET', 'POST'])
+def crear_comentario():
+    formulario = ComentarioForm()
+    if formulario.validate_on_submit():
+        nombre = formulario.nombre.data
+        correo = formulario.correo.data
+        comentario_texto = formulario.comentario.data
+        print(f'¡Comentario creado! Nombre: {nombre}, Correo: {correo}, Comentario: {comentario_texto}')
+        try:
+            with open("comentarios.txt", "a+") as archivo1:
+                archivo1.write(f"{nombre},{correo},{comentario_texto}" + "\n")
+        finally:
+            archivo1.close()
+    return render_template('/admin/comentarios.html', formulario=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+
+@app.route('/admin/comentarios')
+def comentarios():
+    return render_template('/admin/ver_comentarios.html', comment= comentarios, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
 @app.route("/admin/login/", methods=["GET", "POST"])
 def login():
@@ -98,7 +110,7 @@ def login():
         if(errorSesion):
             return render_template("/admin/login.html", form=form, error=errorSesion)
 
-        return render_template("index.html", posts=publicaciones, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+        return render_template("index.html", inicioSesion=HaIniciado_sesion, admin=esAdmin)
     return render_template("/admin/login.html", form=form)
 
 @app.route("/signout")
@@ -108,7 +120,7 @@ def cerrar_sesion():
     global esAdmin
     esAdmin = False
     # retornamos la página web index.html con HaIniciado_sesion en False
-    return render_template('index.html', posts=publicaciones, inicioSesion = HaIniciado_sesion, admin=esAdmin)
+    return render_template('index.html', inicioSesion = HaIniciado_sesion, admin=esAdmin)
 
 if __name__ == '__main__':
     try:
@@ -128,5 +140,20 @@ if __name__ == '__main__':
             elemento['usuario'] = info[1]  # el key 'usuario' toma el valor del correo
             elemento['clave'] = info[2].strip('\n')  # el key 'clave' guarda la contraseña
             users.append(elemento)
+    #Para mostrar Platos en carta
+    try:
+        with open("platos_carta.txt", "r") as archivo1:
+            platos_all = archivo1.readlines()
+    finally:
+        archivo1.close()
+        for line in platos_all:
+            elem = line.split('&')
+            plato = {}
+            plato['nombre'] = elem[0]
+            plato['descripcion'] = elem[1]
+            plato['precio'] = elem[2].strip('\n')
+            listaPlatos.append(plato)
+
+    # Para mostrar comentarios al administrador
 
     app.run(debug=True)
