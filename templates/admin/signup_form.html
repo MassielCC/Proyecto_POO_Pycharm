@@ -3,6 +3,11 @@
 {% block body %}
 <div class="container py-3 col-4">
     <h2 class="text-center">Regístrate</h2>
+    {% if errorRegistro %}
+        <div class="container col-12">
+            <p class="text-center" style="background-color: #FBEB87;">El correo ya ha sido registrado</p>
+        </div>
+    {% endif %}
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <div class="form-group">
