@@ -1,5 +1,5 @@
 Aji de gallina & Tradicional plato peruano, pollo deshilachado en crema de ají amarillo, queso y nueces, servidas con papas al vapor y arroz blanco. & 13 & False
-Lomo saltado & Cortes de lomo fino, salteado y dorado en fondo de sarten, en una salsa especial de la casa, con cebolla y tomates en juliana, acompañado con arroz y papas fritas. & 15 & False
+Lomo saltado & Cortes de lomo fino, salteado y dorado en fondo de sarten, en una salsa especial de la casa, con cebolla y tomates en juliana, acompañado con arroz y papas fritas. & 15 & True
 Pescado a la plancha & Filete de pescado a la plancha con papas fritas. & 20 & TrueSeco de cordero & Cordero marinado y cocido con especias peruanas, acompañado de arroz blanco y porotos. & 13 & False
 Chupe de camarones & Camarones cocidos en caldo de crustáceos, verduras, papas, choclos y arroz, servido con huevo escalfado. & 18 & False
 Risotto de calamar & En su punto exacto de risotto, con una emulsión de tinta de calamar y calamares a la plancha y un toque de la casa. & 20 & False
