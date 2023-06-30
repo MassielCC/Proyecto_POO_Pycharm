@@ -21,7 +21,7 @@ class CartaForm(FlaskForm):
     nombre = StringField('Nombre', validators=[DataRequired()])
     descripcion = TextAreaField('Descripción', validators=[DataRequired()])
     precio = StringField('Precio', validators=[DataRequired()])
-    es_favorito = BooleanField(default=False)
+    ocultar = BooleanField(default=False)
     submit = SubmitField('Agregar plato')
 
 class LoginForm(FlaskForm):
