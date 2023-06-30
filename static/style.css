@@ -51,6 +51,11 @@ h6{
     padding: 10px 10px;
     margin-bottom:20px;
 }
+.carta_fav{
+    background-color: #FFDADA;
+    padding: 10px 10px;
+    margin-bottom:20px;
+}
 .styleButton{
     background-color: #97311B;
     color: white;
@@ -63,13 +68,20 @@ h6{
     color: #97311B;
     border: 1px solid #97311B;
     font-weight: bold;
-    transition-duration: 300ms;
+    transition-duration: 200ms;
+    cursor: pointer;
+}
+.fas {
+    display: inline;
+    transition-duration: 200ms;
+    cursor: pointer;
+    padding-right: 7px;
 }
 @media (max-width: 500px) {
     nav .nav-item a{
         font-size: 0.75rem;
     }
-  h2, h6 {
+  h2, h6, h4 {
     font-size: 1rem;
   }
   p, .detalles{font-size: 0.75rem;}
