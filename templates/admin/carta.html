@@ -5,24 +5,32 @@
     <br>
     <h2 class="text-center">Nuestra carta</h2><br>
     <div class="row">
-            {% for plato in posts %}
-
+        {% for plato in posts %}
+            {% if plato.ocultar == ' False' or plato.ocultar == 'False' %}
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="plato col">
                         <h4>{{ plato.nombre }}</h4>
                         <p> {{ plato.descripcion }} </p><br>
                         <p class="float-end"><b>Precio:</b> S/. {{ plato.precio }} </p><br>
-
-                        <div class="agregarFavoritos center">
-                            <form action="favoritos" method="post"> <!--obtener el nombre del plato que ha sido marcado favorito-->
-                                <label><input type="checkbox" name="checkbox" id="checkboxFavorito" value="{{ plato.nombre }}"> Agregar a favoritos</label>
-                                <button class="styleButton" type="submit">Enviar</button>
-                            </form>
-                        </div>
+                        {% if not admin %}
+                            <div class="center">
+                                <form action="favoritos" method="post"> <!--obtener el nombre del plato que ha sido marcado favorito-->
+                                    <label><input type="checkbox" name="checkbox" id="checkboxFavorito" value="{{ plato.nombre }}"> Agregar a favoritos</label>
+                                    <button class="styleButton" type="submit">Enviar</button>
+                                </form>
+                            </div>
+                        {% else %}
+                            <div class="center">
+                                <form action="carta" method="post">
+                                    <label><input type="checkbox" name="checkbox2" id="checkboxOcultar" value="{{ plato.nombre }}"> Ocultar plato </label><br>
+                                    <button class="styleButton" type="submit">Enviar</button>
+                                </form>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
 </div><br>
 {% endblock %}
