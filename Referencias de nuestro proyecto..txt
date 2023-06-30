@@ -1,0 +1,28 @@
+Con respecto a nuestro codigo de Python - Programación Orientada a Objetos:
+
+"Design Patterns: Elements of Reusable Object-Oriented Software" de Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides.
+"Clean Code: A Handbook of Agile Software Craftsmanship" de Robert C. Martin.
+"Head First Design Patterns" de Eric Freeman, Elisabeth Robson, Bert Bates y Kathy Sierra.
+
+
+Con respecto a la Asociación de Clases a Formularios con Flask:
+
+"Flask Web Development with Python Tutorial" de Miguel Grinberg.
+"Flask Web Development Cookbook" de Shalabh Aggarwal.
+"Flask by Example" de Gareth Dwyer.
+
+
+
+Tutoriales en YouTube:
+
+Con respecto a nuestro codigo de Python - Programación Orientada a Objetos:
+
+"Object-Oriented Programming (OOP) in Python 3" by Corey Schafer: https://www.youtube.com/watch?v=ZDa-Z5JzLYM
+"Python OOP Tutorial - Working with Classes for Beginners" by Programming with Mosh: https://www.youtube.com/watch?v=JeznW_7DlB0
+"Python OOP Tutorial | Object Oriented Programming" by freeCodeCamp.org: https://www.youtube.com/watch?v=JeznW_7DlB0
+
+Con respecto a la Asociación de Clases a Formularios con Flask:
+
+"Flask Tutorial - Full Web Development Course" by Corey Schafer: https://www.youtube.com/watch?v=MwZwr5Tvyxo
+"Python Flask Tutorial: Full-Featured Web App Part 1 - Getting Started" by Traversy Media: https://www.youtube.com/watch?v=zRwy8gtgJ1A
+"Flask Web Development with Python Tutorial" by thenewboston: https://www.youtube.com/watch?v=MwZwr5Tvyxo
