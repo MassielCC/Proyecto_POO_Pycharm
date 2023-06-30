@@ -1,0 +1,46 @@
+Libros de referencia:
+
+Con respecto a nuestro codigo de Python - Programación Orientada a Objetos:
+
+"Design Patterns: Elements of Reusable Object-Oriented Software" de Erich Gamma, Richard Helm, Ralph Johnson y John Vlissides.
+"Clean Code: A Handbook of Agile Software Craftsmanship" de Robert C. Martin.
+"Head First Design Patterns" de Eric Freeman, Elisabeth Robson, Bert Bates y Kathy Sierra.
+
+
+Con respecto a la Asociación de Clases a Formularios con Flask:
+
+"Flask Web Development with Python Tutorial" de Miguel Grinberg.
+"Flask Web Development Cookbook" de Shalabh Aggarwal.
+"Flask by Example" de Gareth Dwyer.
+
+
+
+Tutoriales en YouTube:
+
+Con respecto a nuestro codigo de Python - Programación Orientada a Objetos:
+
+"Object-Oriented Programming (OOP) in Python 3" by Corey Schafer: https://www.youtube.com/watch?v=ZDa-Z5JzLYM
+"Python OOP Tutorial - Working with Classes for Beginners" by Programming with Mosh: https://www.youtube.com/watch?v=JeznW_7DlB0
+"Python OOP Tutorial | Object Oriented Programming" by freeCodeCamp.org: https://www.youtube.com/watch?v=JeznW_7DlB0
+
+Con respecto a la Asociación de Clases a Formularios con Flask:
+
+"Flask Tutorial - Full Web Development Course" by Corey Schafer: https://www.youtube.com/watch?v=MwZwr5Tvyxo
+"Python Flask Tutorial: Full-Featured Web App Part 1 - Getting Started" by Traversy Media: https://www.youtube.com/watch?v=zRwy8gtgJ1A
+"Flask Web Development with Python Tutorial" by thenewboston: https://www.youtube.com/watch?v=MwZwr5Tvyxo
+
+
+
+Paginas web confiables:
+
+Con respecto a nuestro codigo en Python - Programación Orientada a Objetos:
+
+Python.org - Object-Oriented Programming (OOP): https://docs.python.org/3/tutorial/classes.html
+Real Python - Object-Oriented Programming (OOP) in Python: A Comprehensive Guide: https://realpython.com/python3-object-oriented-programming/
+GeeksforGeeks - Object-Oriented Programming (OOP) in Python: https://www.geeksforgeeks.org/object-oriented-programming-oops-concept-in-python/
+
+Con respecto a la Asociación de Clases a Formularios con Flask:
+
+Flask Documentation - Quickstart: Working with Forms: https://flask.palletsprojects.com/en/2.1.x/quickstart/#working-with-forms
+Flask-WTF Documentation - Introduction: https://flask-wtf.readthedocs.io/en/1.0.x/#introduction
+Real Python - Flask by Example – Implementing Forms: https://realpython.com/flask-by-example-implementing-a-redis-task-queue/#implementing-forms
