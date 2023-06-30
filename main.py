@@ -59,18 +59,49 @@ def crear_carta(post_id):
         nombre = formulario.nombre.data
         descripcion = formulario.descripcion.data
         precio = formulario.precio.data
-        es_fav = formulario.es_favorito.data
-        print(f'¡Plato agregado! Nombre: {nombre}, Descripción: {descripcion}, Favorito? {es_fav}')
+        ocultar = formulario.ocultar.data
+        print(f'¡Plato agregado! Nombre: {nombre}, Descripción: {descripcion}, Favorito? {ocultar}')
         try:
             with open("platos_carta.txt", "a+") as archivo1:
-                archivo1.write(f"{nombre} & {descripcion} & {precio} & {es_fav}" + "\n")
+                archivo1.write(f"{nombre} & {descripcion} & {precio} & {ocultar}" + "\n")
         finally:
             archivo1.close()
         return redirect(url_for('index'))
     return render_template("/admin/crear_carta.html", form=formulario, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
-@app.route("/admin/carta")
+@app.route("/admin/carta", methods=["GET", "POST"])
 def carta():
+    plato_seleccionado = request.form.get('checkbox2')
+
+    if plato_seleccionado == None:
+        print("No se ha seleccionado ningun plato")
+    else:
+        print("Ocultar:", plato_seleccionado)
+        nuevaLista =[]
+        try:
+            with open("platos_carta.txt", "r") as archivoC:
+                platos_all = archivoC.readlines()
+                for elem in platos_all:
+                    each_plato = elem.split('&')
+                    #print("-->", each_plato[0])
+                    if each_plato[0] == plato_seleccionado:
+                        #print("-->", each_plato)
+                        each_plato[3] = " True\n"
+                        junto = '&'.join(each_plato)
+                        print("nuevo->", junto)
+                        nuevaLista.append(junto)
+                    else:
+                        nuevaLista.append(elem)
+        finally:
+            archivoC.close()
+        print("Nueva lista2:", nuevaLista)
+        try:
+            with open("platos_carta.txt", "w") as archivoN:
+                for plato in nuevaLista:
+                    archivoN.write(plato)
+        finally:
+            archivoN.close()
+
     return render_template('/admin/carta.html', posts=listaPlatos, inicioSesion=HaIniciado_sesion, admin=esAdmin, usuarioA= usuarioLog)
 
 @app.route("/admin/favoritos", methods=["GET", "POST"])
@@ -191,7 +222,7 @@ if __name__ == '__main__':
             plato['nombre'] = elem[0]
             plato['descripcion'] = elem[1]
             plato['precio'] = elem[2]
-            plato['favorito'] = elem[3].strip('\n')
+            plato['ocultar'] = elem[3].strip('\n')
             listaPlatos.append(plato)
 
     # Para mostrar comentarios al administrador
