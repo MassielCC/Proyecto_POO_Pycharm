@@ -6,17 +6,19 @@
     <h2 class="text-center">Platos favoritos</h2><br>
     <div class="row">
         {% for plato in posts %}
-            <p>{{plato}}</p>>
-            {% if plato['favorito'] == ' False' %}
-                <div class="col-lg-4 col-md-6 col-sm-10 m-auto">
-                    <div class="carta_fav col">
-                        <h4>{{ plato.nombre }} <span class="fav"><i class="far fa-star"></i><i class="fas fa-star"></i></span></h4>
-                        <p> {{ plato.descripcion }} </p><br>
-                        <p> {{ plato.favorito }} </p><br>
-                        <p class="float-end"> Precio: S/. {{ plato.precio }} </p>
+            {% for favorito in nuevo %}
+                <!--p>Plato en carta: {{plato.nombre}}</p-->
+                <!--p>Plato en lista favorito: {{favorito}}</p--->
+                {% if plato.nombre ==  favorito %}
+                    <div class="col-lg-4 col-md-6 col-sm-10 m-auto">
+                        <div class="carta_fav col">
+                            <h4>{{ plato.nombre }}</h4>
+                            <p> {{ plato.descripcion }} </p><br>
+                            <p class="float-end"> Precio: S/. {{ plato.precio }} </p>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     </div>
 </div><br>

@@ -1,13 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for
-from forms import SignupForm, CartaForm, LoginForm, ComentarioForm
+from forms import SignupForm, CartaForm, LoginForm, ComentarioForm, Favoritos
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '7110c8ae51a4b5af97be6534caef90e4bb9bdcb3380af008f90b23a5d1616bf319bc298105da20fe'
 # app.config['SECRET_KEY'] = 'pass'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 HaIniciado_sesion = False
 esAdmin = False
 errorSesion= False
+correoDuplicado= False
+usuarioLog = None
+
 @app.route("/")
 def index():
     return render_template("index.html", inicioSesion=HaIniciado_sesion, admin=esAdmin)
@@ -22,16 +26,26 @@ def show_signup_form():
         name = form.name.data
         email = form.email.data
         password = form.password.data
-        try:
-            with open("lista_usuarios.txt", "a+") as archivo1:
-                archivo1.write(f"{name},{email},{password}" + "\n")
-        finally:
-            archivo1.close()
-        next = request.args.get('next', None)
-        if next:
-            return redirect(next)
-        # redigire a la página principal!
-        return redirect(url_for('index'))
+        # Comprobar que no se registren 2 cuentas con el mismo correo
+        global correoDuplicado
+        correoDuplicado = False
+        for registro in users:
+            if registro['usuario'] == email:
+                correoDuplicado = True
+                print("El correo ya ha sido registrado")
+
+        if not correoDuplicado:
+            try:
+                with open("lista_usuarios.txt", "a+") as archivo1:
+                    archivo1.write(f"{name},{email},{password}" + "\n")
+            finally:
+                archivo1.close()
+            # Al momento del registro se creara un archivo txt para almacenar la informacion del usuario
+            form.crear_archivo(email)
+
+            return redirect(url_for('index'))
+        else:
+            return render_template("/admin/signup_form.html", form=form, inicioSesion=HaIniciado_sesion, admin=esAdmin, errorRegistro=correoDuplicado)
     # caso contrario, redirige a signup_form con el contenido de form.
     return render_template("/admin/signup_form.html", form=form, inicioSesion=HaIniciado_sesion, admin=esAdmin)
 
@@ -45,10 +59,11 @@ def crear_carta(post_id):
         nombre = formulario.nombre.data
         descripcion = formulario.descripcion.data
         precio = formulario.precio.data
-        print(f'¡Plato agregado! Nombre: {nombre}, Descripción: {descripcion}')
+        es_fav = formulario.es_favorito.data
+        print(f'¡Plato agregado! Nombre: {nombre}, Descripción: {descripcion}, Favorito? {es_fav}')
         try:
             with open("platos_carta.txt", "a+") as archivo1:
-                archivo1.write(f"{nombre} & {descripcion} & {precio}" + "\n")
+                archivo1.write(f"{nombre} & {descripcion} & {precio} & {es_fav}" + "\n")
         finally:
             archivo1.close()
         return redirect(url_for('index'))
@@ -56,7 +71,27 @@ def crear_carta(post_id):
 
 @app.route("/admin/carta")
 def carta():
-    return render_template('/admin/carta.html', posts=listaPlatos, inicioSesion=HaIniciado_sesion, admin=esAdmin)
+    return render_template('/admin/carta.html', posts=listaPlatos, inicioSesion=HaIniciado_sesion, admin=esAdmin, usuarioA= usuarioLog)
+
+@app.route("/admin/favoritos", methods=["GET", "POST"])
+def favoritos():
+    favorito_user = Favoritos(usuarioLog)
+    favorito_user.getlistaFavorito(usuarioLog)              # obtener lista guardada de favoritos
+
+    plato_seleccionado = request.form.get('checkbox')
+    if plato_seleccionado == None:
+        print("No se ha agregado nuevo plato")
+    else:
+        print("Nuevo favorito:", plato_seleccionado)
+
+        favorito_user.agregarFav(plato_seleccionado, usuarioLog)            # agregar plato a lista anterior
+        print("Lista de favoritos123", favorito_user.listaFav)       # lista actualizada
+
+    nuevaLista=[]
+    for elemento in favorito_user.listaFav:
+        plato = elemento.strip('\n')
+        nuevaLista.append(plato)
+    return render_template('/admin/favoritos.html', posts=listaPlatos, nuevo=nuevaLista, inicioSesion=HaIniciado_sesion, admin=esAdmin, usuarioA= usuarioLog)
 
 lista_comentarios=[]
 @app.route('/admin/comentarios', methods=['GET', 'POST'])
@@ -88,17 +123,17 @@ def login():
         password = form.password.data
         #print('email ingresado: ' +email)
         #print('contraseña ingresada: ' +password)
-        # recoro la lista usuarios
         for elemento in users:
             #print(elemento)
             # evaluo el valor de 'usuario' y contraseña en el diccionario vs el ingresado en el formulario
             if elemento['usuario'] == email and elemento['clave'].strip() == password:
-                # si cumple imprimimos en pantalla: inicio de sesión correcto!
                 print('Inicio de sesión correcto!')
                 global HaIniciado_sesion
                 HaIniciado_sesion = True
                 global errorSesion
                 errorSesion = False
+                global usuarioLog
+                usuarioLog = email
                 if email == "marelly.colla@upch.pe" or email == "sebastian.saldana@upch.pe":
                     print("Es administrador")
                     global esAdmin
@@ -111,7 +146,7 @@ def login():
         if(errorSesion):
             return render_template("/admin/login.html", form=form, error=errorSesion)
 
-        return render_template("index.html", inicioSesion=HaIniciado_sesion, admin=esAdmin)
+        return render_template("index.html", inicioSesion=HaIniciado_sesion, admin=esAdmin, usuarioA= usuarioLog)
     return render_template("/admin/login.html", form=form)
 
 @app.route("/signout")
@@ -120,8 +155,10 @@ def cerrar_sesion():
     HaIniciado_sesion = False # modificamos el valor de HaIniciado_sesion a False
     global esAdmin
     esAdmin = False
+    global usuarioLog
+    usuarioLog = None #Regresar usuario logueado a None
     # retornamos la página web index.html con HaIniciado_sesion en False
-    return render_template('index.html', inicioSesion = HaIniciado_sesion, admin=esAdmin)
+    return render_template('index.html', inicioSesion = HaIniciado_sesion, admin=esAdmin, usuarioA= usuarioLog)
 
 if __name__ == '__main__':
     try:
@@ -145,6 +182,7 @@ if __name__ == '__main__':
     try:
         with open("platos_carta.txt", "r") as archivo1:
             platos_all = archivo1.readlines()
+            #print(platos_all)
     finally:
         archivo1.close()
         for line in platos_all:
@@ -152,7 +190,8 @@ if __name__ == '__main__':
             plato = {}
             plato['nombre'] = elem[0]
             plato['descripcion'] = elem[1]
-            plato['precio'] = elem[2].strip('\n')
+            plato['precio'] = elem[2]
+            plato['favorito'] = elem[3].strip('\n')
             listaPlatos.append(plato)
 
     # Para mostrar comentarios al administrador

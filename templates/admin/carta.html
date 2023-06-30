@@ -9,9 +9,16 @@
 
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="plato col">
-                        <h4>{{ plato.nombre }} <span class="fav"><i class="far fa-star"></i><i class="fas fa-star"></i></span></h4>
+                        <h4>{{ plato.nombre }}</h4>
                         <p> {{ plato.descripcion }} </p><br>
-                        <p class="float-end"> Precio: S/. {{ plato.precio }} </p>
+                        <p class="float-end"><b>Precio:</b> S/. {{ plato.precio }} </p><br>
+
+                        <div class="agregarFavoritos center">
+                            <form action="favoritos" method="post"> <!--obtener el nombre del plato que ha sido marcado favorito-->
+                                <label><input type="checkbox" name="checkbox" id="checkboxFavorito" value="{{ plato.nombre }}"> Agregar a favoritos</label>
+                                <button class="styleButton" type="submit">Enviar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
